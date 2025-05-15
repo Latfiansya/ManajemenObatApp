@@ -41,8 +41,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.dgvTransaksi = new System.Windows.Forms.DataGridView();
-            this.dtTanggalTransaksi = new System.Windows.Forms.DateTimePicker();
-            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTransaksi)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,7 +56,7 @@
             // 
             // txtTotalHarga
             // 
-            this.txtTotalHarga.Location = new System.Drawing.Point(307, 342);
+            this.txtTotalHarga.Location = new System.Drawing.Point(307, 366);
             this.txtTotalHarga.Name = "txtTotalHarga";
             this.txtTotalHarga.Size = new System.Drawing.Size(205, 22);
             this.txtTotalHarga.TabIndex = 36;
@@ -66,7 +64,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(216, 345);
+            this.label4.Location = new System.Drawing.Point(216, 369);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(85, 16);
             this.label4.TabIndex = 35;
@@ -104,21 +102,21 @@
             // 
             // txtJumlah
             // 
-            this.txtJumlah.Location = new System.Drawing.Point(307, 314);
+            this.txtJumlah.Location = new System.Drawing.Point(307, 338);
             this.txtJumlah.Name = "txtJumlah";
             this.txtJumlah.Size = new System.Drawing.Size(205, 22);
             this.txtJumlah.TabIndex = 31;
             // 
             // txtIdObat
             // 
-            this.txtIdObat.Location = new System.Drawing.Point(307, 284);
+            this.txtIdObat.Location = new System.Drawing.Point(307, 308);
             this.txtIdObat.Name = "txtIdObat";
             this.txtIdObat.Size = new System.Drawing.Size(205, 22);
             this.txtIdObat.TabIndex = 30;
             // 
             // txtIdApoteker
             // 
-            this.txtIdApoteker.Location = new System.Drawing.Point(307, 254);
+            this.txtIdApoteker.Location = new System.Drawing.Point(307, 278);
             this.txtIdApoteker.Name = "txtIdApoteker";
             this.txtIdApoteker.Size = new System.Drawing.Size(205, 22);
             this.txtIdApoteker.TabIndex = 29;
@@ -126,7 +124,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(243, 317);
+            this.label3.Location = new System.Drawing.Point(243, 341);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(56, 16);
             this.label3.TabIndex = 28;
@@ -135,7 +133,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(219, 260);
+            this.label2.Location = new System.Drawing.Point(219, 284);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(84, 16);
             this.label2.TabIndex = 27;
@@ -144,7 +142,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(243, 287);
+            this.label1.Location = new System.Drawing.Point(243, 311);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(58, 16);
             this.label1.TabIndex = 26;
@@ -154,37 +152,19 @@
             // 
             this.dgvTransaksi.BackgroundColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.dgvTransaksi.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvTransaksi.Location = new System.Drawing.Point(44, 26);
+            this.dgvTransaksi.Location = new System.Drawing.Point(44, 33);
             this.dgvTransaksi.Name = "dgvTransaksi";
             this.dgvTransaksi.RowHeadersWidth = 51;
             this.dgvTransaksi.RowTemplate.Height = 24;
-            this.dgvTransaksi.Size = new System.Drawing.Size(713, 214);
+            this.dgvTransaksi.Size = new System.Drawing.Size(713, 226);
             this.dgvTransaksi.TabIndex = 25;
             this.dgvTransaksi.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTransaksi_CellContentClick);
-            // 
-            // dtTanggalTransaksi
-            // 
-            this.dtTanggalTransaksi.Location = new System.Drawing.Point(307, 370);
-            this.dtTanggalTransaksi.Name = "dtTanggalTransaksi";
-            this.dtTanggalTransaksi.Size = new System.Drawing.Size(205, 22);
-            this.dtTanggalTransaksi.TabIndex = 40;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(172, 374);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(127, 16);
-            this.label5.TabIndex = 39;
-            this.label5.Text = "Tanggal Transaksi :";
             // 
             // FormTransaksi
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.dtTanggalTransaksi);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.btnHapus);
             this.Controls.Add(this.txtTotalHarga);
             this.Controls.Add(this.label4);
@@ -221,7 +201,5 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dgvTransaksi;
-        private System.Windows.Forms.DateTimePicker dtTanggalTransaksi;
-        private System.Windows.Forms.Label label5;
     }
 }

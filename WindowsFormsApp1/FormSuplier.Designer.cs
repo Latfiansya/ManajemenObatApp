@@ -44,7 +44,7 @@
             // 
             // btnHapus
             // 
-            this.btnHapus.Location = new System.Drawing.Point(412, 370);
+            this.btnHapus.Location = new System.Drawing.Point(412, 377);
             this.btnHapus.Name = "btnHapus";
             this.btnHapus.Size = new System.Drawing.Size(105, 30);
             this.btnHapus.TabIndex = 37;
@@ -54,7 +54,7 @@
             // 
             // btnClear
             // 
-            this.btnClear.Location = new System.Drawing.Point(525, 370);
+            this.btnClear.Location = new System.Drawing.Point(525, 377);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(103, 30);
             this.btnClear.TabIndex = 34;
@@ -64,7 +64,7 @@
             // 
             // btnEdit
             // 
-            this.btnEdit.Location = new System.Drawing.Point(301, 370);
+            this.btnEdit.Location = new System.Drawing.Point(301, 377);
             this.btnEdit.Name = "btnEdit";
             this.btnEdit.Size = new System.Drawing.Size(103, 30);
             this.btnEdit.TabIndex = 33;
@@ -74,7 +74,7 @@
             // 
             // btnTambah
             // 
-            this.btnTambah.Location = new System.Drawing.Point(190, 370);
+            this.btnTambah.Location = new System.Drawing.Point(190, 377);
             this.btnTambah.Name = "btnTambah";
             this.btnTambah.Size = new System.Drawing.Size(103, 30);
             this.btnTambah.TabIndex = 32;
@@ -84,21 +84,21 @@
             // 
             // txtJenisObat
             // 
-            this.txtJenisObat.Location = new System.Drawing.Point(307, 336);
+            this.txtJenisObat.Location = new System.Drawing.Point(307, 343);
             this.txtJenisObat.Name = "txtJenisObat";
             this.txtJenisObat.Size = new System.Drawing.Size(205, 22);
             this.txtJenisObat.TabIndex = 31;
             // 
             // txtNama
             // 
-            this.txtNama.Location = new System.Drawing.Point(307, 306);
+            this.txtNama.Location = new System.Drawing.Point(307, 313);
             this.txtNama.Name = "txtNama";
             this.txtNama.Size = new System.Drawing.Size(205, 22);
             this.txtNama.TabIndex = 30;
             // 
             // txtId
             // 
-            this.txtId.Location = new System.Drawing.Point(307, 276);
+            this.txtId.Location = new System.Drawing.Point(307, 283);
             this.txtId.Name = "txtId";
             this.txtId.Size = new System.Drawing.Size(205, 22);
             this.txtId.TabIndex = 29;
@@ -106,7 +106,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(216, 336);
+            this.label3.Location = new System.Drawing.Point(216, 343);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(77, 16);
             this.label3.TabIndex = 28;
@@ -115,7 +115,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(198, 306);
+            this.label2.Location = new System.Drawing.Point(198, 313);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(95, 16);
             this.label2.TabIndex = 27;
@@ -124,7 +124,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(222, 279);
+            this.label1.Location = new System.Drawing.Point(222, 286);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(71, 16);
             this.label1.TabIndex = 26;
@@ -134,11 +134,11 @@
             // 
             this.dgvSuplier.BackgroundColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.dgvSuplier.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvSuplier.Location = new System.Drawing.Point(44, 46);
+            this.dgvSuplier.Location = new System.Drawing.Point(44, 39);
             this.dgvSuplier.Name = "dgvSuplier";
             this.dgvSuplier.RowHeadersWidth = 51;
             this.dgvSuplier.RowTemplate.Height = 24;
-            this.dgvSuplier.Size = new System.Drawing.Size(713, 214);
+            this.dgvSuplier.Size = new System.Drawing.Size(713, 221);
             this.dgvSuplier.TabIndex = 25;
             this.dgvSuplier.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSuplier_CellContentClick);
             // 

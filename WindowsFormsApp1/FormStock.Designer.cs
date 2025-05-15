@@ -37,9 +37,9 @@
             // 
             // btnUpdate
             // 
-            this.btnUpdate.Location = new System.Drawing.Point(479, 401);
+            this.btnUpdate.Location = new System.Drawing.Point(482, 399);
             this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(102, 25);
+            this.btnUpdate.Size = new System.Drawing.Size(102, 29);
             this.btnUpdate.TabIndex = 47;
             this.btnUpdate.Text = "Perbarui Data";
             this.btnUpdate.UseVisualStyleBackColor = true;

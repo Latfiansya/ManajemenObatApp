@@ -44,6 +44,12 @@ namespace ManajemenObatApp
 
         private void btnTambah_Click(object sender, EventArgs e)
         {
+            if (txtId.Text == "" || txtNama.Text == "" || txtKategori.Text == "" || txtTanggal.Text == "")
+            {
+                MessageBox.Show("Isi data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             string query = "INSERT INTO obat (id_obat, nama, kategori, tgl_kadaluwarsa) VALUES (@id, @nama, @kategori, @tgl)";
             SqlParameter[] parameters = {
                 new SqlParameter("@id", txtId.Text),
@@ -58,6 +64,12 @@ namespace ManajemenObatApp
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
+            if (txtId.Text == "" || txtNama.Text == "" || txtKategori.Text == "" || txtTanggal.Text == "")
+            {
+                MessageBox.Show("Isi data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             string query = "UPDATE obat SET nama = @nama, kategori = @kategori, tgl_kadaluwarsa = @tgl WHERE id_obat = @id";
             SqlParameter[] parameters = {
                 new SqlParameter("@id", txtId.Text),
@@ -77,6 +89,12 @@ namespace ManajemenObatApp
 
         private void btnHapus_Click(object sender, EventArgs e)
         {
+            if (txtId.Text == "")
+            {
+                MessageBox.Show("Ketik ID yang ingin dihapus!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             string query = "DELETE FROM obat WHERE id_obat = @id";
             SqlParameter[] parameters = {
                 new SqlParameter("@id", txtId.Text)

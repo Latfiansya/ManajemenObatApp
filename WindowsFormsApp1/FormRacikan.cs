@@ -48,5 +48,89 @@ namespace ManajemenObatApp
                 txtTanggal.Text = Convert.ToDateTime(row.Cells["tanggal_resep"].Value).ToString("yyyy-MM-dd");
             }
         }
+
+        private void btnTambah_Click(object sender, EventArgs e)
+        {
+            if (txtId.Text == "" || txtIdTransaksi.Text == "" || txtResep.Text == "" || txtTanggal.Text == "")
+            {
+                MessageBox.Show("Isi data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string query = "INSERT INTO racikan_obat (id_racikan, id_transaksi, resep_dokter, tanggal_resep) VALUES (@id, @trans, @resep, @tgl)";
+            SqlParameter[] parameters = {
+                new SqlParameter("@id", txtId.Text),
+                new SqlParameter("@trans", txtIdTransaksi.Text),
+                new SqlParameter("@resep", txtResep.Text),
+                new SqlParameter("@tgl", txtTanggal.Text)
+            };
+
+            try
+            {
+                db.ExecuteNonQuery(query, parameters);
+                LoadData();
+                ClearInput();
+                MessageBox.Show("Data berhasil ditambahkan.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal menambah data: " + ex.Message);
+            }
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (txtId.Text == "" || txtIdTransaksi.Text == "" || txtResep.Text == "" || txtTanggal.Text == "")
+            {
+                MessageBox.Show("Isi data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string query = "UPDATE racikan_obat SET id_transaksi=@trans, resep_dokter=@resep, tanggal_resep=@tgl WHERE id_racikan=@id";
+            SqlParameter[] parameters = {
+                new SqlParameter("@id", txtId.Text),
+                new SqlParameter("@trans", txtIdTransaksi.Text),
+                new SqlParameter("@resep", txtResep.Text),
+                new SqlParameter("@tgl", txtTanggal.Text)
+            };
+
+            try
+            {
+                db.ExecuteNonQuery(query, parameters);
+                LoadData();
+                ClearInput();
+                MessageBox.Show("Data berhasil diubah.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal mengubah data: " + ex.Message);
+            }
+        }
+
+        private void btnHapus_Click(object sender, EventArgs e)
+        {
+            if (txtId.Text == "")
+            {
+                MessageBox.Show("Isi data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string query = "DELETE FROM racikan_obat WHERE id_racikan=@id";
+            SqlParameter[] parameters = {
+                new SqlParameter("@id", txtId.Text)
+            };
+
+            try
+            {
+                db.ExecuteNonQuery(query, parameters);
+                LoadData();
+                ClearInput();
+                MessageBox.Show("Data berhasil dihapus.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal menghapus data: " + ex.Message);
+            }
+        }
     }
 }

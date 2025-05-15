@@ -94,7 +94,7 @@
             // 
             this.lblError.AutoSize = true;
             this.lblError.ForeColor = System.Drawing.Color.Red;
-            this.lblError.Location = new System.Drawing.Point(311, 290);
+            this.lblError.Location = new System.Drawing.Point(334, 295);
             this.lblError.Name = "lblError";
             this.lblError.Size = new System.Drawing.Size(208, 16);
             this.lblError.TabIndex = 6;
@@ -117,7 +117,6 @@
             this.Name = "LoginForm";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Text = "Halaman Login";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
