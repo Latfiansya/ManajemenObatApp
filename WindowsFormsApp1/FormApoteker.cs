@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -14,11 +15,14 @@ namespace ManajemenObatApp
 {
     public partial class FormApoteker: Form
     {
-        DatabaseHelper db = new DatabaseHelper("Data Source=PREDATOR579;Initial Catalog=ManajemenObat;Integrated Security=True");
+        DatabaseHelper db;
         public FormApoteker()
         {
             InitializeComponent();
+            string connectionString = ConfigurationManager.ConnectionStrings["ManajemenObatDB"].ConnectionString;
+            db = new DatabaseHelper(connectionString);
             LoadData();
+
         }
 
         private void LoadData()
