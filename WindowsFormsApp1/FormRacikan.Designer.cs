@@ -157,6 +157,7 @@
             this.dgvRacikan.RowTemplate.Height = 24;
             this.dgvRacikan.Size = new System.Drawing.Size(713, 214);
             this.dgvRacikan.TabIndex = 25;
+            this.dgvRacikan.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvRacikan_CellContentClick);
             this.dgvRacikan.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvRacikan_CellContentClick);
             // 
             // FormRacikan

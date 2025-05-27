@@ -52,6 +52,7 @@
             this.dgvApoteker.RowTemplate.Height = 24;
             this.dgvApoteker.Size = new System.Drawing.Size(713, 214);
             this.dgvApoteker.TabIndex = 0;
+            this.dgvApoteker.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApoteker_CellClick);
             // 
             // label1
             // 

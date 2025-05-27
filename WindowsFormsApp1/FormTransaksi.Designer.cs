@@ -158,6 +158,7 @@
             this.dgvTransaksi.RowTemplate.Height = 24;
             this.dgvTransaksi.Size = new System.Drawing.Size(713, 226);
             this.dgvTransaksi.TabIndex = 25;
+            this.dgvTransaksi.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTransaksi_CellContentClick);
             this.dgvTransaksi.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTransaksi_CellContentClick);
             // 
             // FormTransaksi

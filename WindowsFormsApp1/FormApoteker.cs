@@ -27,7 +27,7 @@ namespace ManajemenObatApp
 
         private void LoadData()
         {
-            dgvApoteker.DataSource = db.ExecuteQuery("SELECT * FROM apoteker");
+            dgvApoteker.DataSource = db.ExecuteQuery("EXEC select_apoteker");
         }
 
         private void ClearInput()
@@ -45,7 +45,7 @@ namespace ManajemenObatApp
                 return;
             }
 
-            string query = "INSERT INTO apoteker VALUES (@id, @nama, @pass)";
+            string query = "EXEC tambah_apoteker @id, @nama, @pass";
             SqlParameter[] param = {
                 new SqlParameter("@id", txtId.Text),
                 new SqlParameter("@nama", txtNama.Text),
@@ -65,11 +65,11 @@ namespace ManajemenObatApp
         {
             if (txtId.Text == "")
             {
-                MessageBox.Show("Ketik ID yang ingin dihapus!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Klik ID yang ingin dihapus!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string query = "DELETE FROM apoteker WHERE id_apoteker=@id";
+            string query = "EXEC hapus_apoteker @id";
             SqlParameter[] param = {
                 new SqlParameter("@id", txtId.Text)
             };
@@ -80,13 +80,13 @@ namespace ManajemenObatApp
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            if(txtId.Text == "" || txtNama.Text == "" || txtPassword.Text.Length < 8)
+            if (txtId.Text == "" || txtNama.Text == "" || txtPassword.Text.Length < 8)
             {
                 MessageBox.Show("Isi data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string query = "UPDATE apoteker SET nama=@nama, password=@pass WHERE id_apoteker=@id";
+            string query = "EXEC update_apoteker @id, @nama, @pass";
             SqlParameter[] param = {
                 new SqlParameter("@id", txtId.Text),
                 new SqlParameter("@nama", txtNama.Text),

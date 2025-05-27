@@ -132,7 +132,7 @@
             this.dgvObat.RowTemplate.Height = 24;
             this.dgvObat.Size = new System.Drawing.Size(713, 214);
             this.dgvObat.TabIndex = 11;
-            this.dgvObat.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvObat_CellContentClick);
+            this.dgvObat.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvObat_CellContentClick);
             // 
             // txtTanggal
             // 
