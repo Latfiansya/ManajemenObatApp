@@ -16,7 +16,13 @@ namespace ManajemenObatApp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new LoginForm());
+
+            Application.Run(new LoginForm()); 
+
+            // Untuk menonaktifkan login sementara, panggil MainForm langsung
+            // Ganti "A001" dengan ID Apoteker dummy yang Anda inginkan
+            //Application.Run(new MainForm("A001"));
+            //Application.Run(new FormSuplier());
         }
     }
 }

@@ -26,38 +26,35 @@ namespace ManajemenObatApp
 
         private void btnKelolaApoteker_Click(object sender, EventArgs e)
         {
-            FormApoteker f = new FormApoteker();
+            this.Hide();
+            FormApoteker f = new FormApoteker(); 
             f.ShowDialog();
+            this.Show(); 
+
         }
 
         private void btnKelolaObat_Click(object sender, EventArgs e)
         {
+            this.Hide();
             FormObat f = new FormObat();
             f.ShowDialog();
-        }
-
-        private void btnKelolaRacikan_Click(object sender, EventArgs e)
-        {
-            FormRacikan f = new FormRacikan();
-            f.ShowDialog();
+            this.Show();
         }
 
         private void btnKelolaSuplier_Click(object sender, EventArgs e)
         {
+            this.Hide();
             FormSuplier f = new FormSuplier();
             f.ShowDialog();
+            this.Show();
         }
 
         private void btnKelolaTransaksi_Click(object sender, EventArgs e)
         {
+            this.Hide();
             FormTransaksi f = new FormTransaksi();
             f.ShowDialog();
-        }
-
-        private void btnKelolaStock_Click(object sender, EventArgs e)
-        {
-            FormStock f = new FormStock();
-            f.ShowDialog();
+            this.Show();
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
@@ -66,6 +63,7 @@ namespace ManajemenObatApp
             LoginForm login = new LoginForm();
             login.Show();
         }
+
     }
 }
 

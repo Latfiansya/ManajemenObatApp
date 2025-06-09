@@ -35,6 +35,9 @@
   <ItemGroup>
     <Reference Include="Accessibility" />
     <Reference Include="Microsoft.Analytics.Diagnostics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6ada29624c937801, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.WinForms.v12.12.0.0.1\lib\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -57,23 +60,17 @@
     <Compile Include="FormApoteker.Designer.cs">
       <DependentUpon>FormApoteker.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormExport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormExport.Designer.cs">
+      <DependentUpon>FormExport.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormObat.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FormObat.Designer.cs">
       <DependentUpon>FormObat.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormRacikan.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormRacikan.Designer.cs">
-      <DependentUpon>FormRacikan.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormStock.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormStock.Designer.cs">
-      <DependentUpon>FormStock.cs</DependentUpon>
     </Compile>
     <Compile Include="FormSuplier.cs">
       <SubType>Form</SubType>
@@ -100,19 +97,21 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ManajemenObatDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ManajemenObatDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormApoteker.resx">
       <DependentUpon>FormApoteker.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormExport.resx">
+      <DependentUpon>FormExport.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormObat.resx">
       <DependentUpon>FormObat.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormRacikan.resx">
-      <DependentUpon>FormRacikan.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormStock.resx">
-      <DependentUpon>FormStock.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormSuplier.resx">
       <DependentUpon>FormSuplier.cs</DependentUpon>
@@ -126,6 +125,7 @@
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ManajemenReportReport.rdlc" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -136,6 +136,18 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="ManajemenObatDataSet.xsc">
+      <DependentUpon>ManajemenObatDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="ManajemenObatDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ManajemenObatDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="ManajemenObatDataSet.xss">
+      <DependentUpon>ManajemenObatDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

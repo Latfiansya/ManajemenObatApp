@@ -10,31 +10,59 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.Caching;
 
 namespace ManajemenObatApp
 {
-    public partial class FormObat: Form
+    public partial class FormObat : Form
     {
         DatabaseHelper db;
+        private MemoryCache cache = MemoryCache.Default;
+        private string cacheKey = "DataObatCache";
+        private CacheItemPolicy policy = new CacheItemPolicy { AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(5) };
+
         public FormObat()
         {
             InitializeComponent();
             string connectionString = ConfigurationManager.ConnectionStrings["ManajemenObatDB"].ConnectionString;
             db = new DatabaseHelper(connectionString);
             LoadData();
-
+            LoadSuplier();
         }
 
-
-        private void FormObat_Load(object sender, EventArgs e)
-        {
-
-        }
 
         private void LoadData()
         {
-            string query = "SELECT * FROM obat";
-            dgvObat.DataSource = db.ExecuteQueryWithParameters(query, new SqlParameter[] { });
+            try
+            {
+                DataTable dt = cache.Get(cacheKey) as DataTable;
+                if (dt == null)
+                {
+                    dt = db.ExecuteQuery("SET STATISTICS IO, TIME ON; EXEC tampilkan_data_obat");
+                    cache.Set(cacheKey, dt, policy);
+                }
+                dgvObat.DataSource = dt;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal memuat data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadSuplier()
+        {
+            try
+            {
+                string query = "EXEC data_suplier";
+                DataTable dt = db.ExecuteQuery(query);
+                cmbSuplier.DataSource = dt;
+                cmbSuplier.DisplayMember = "nama";
+                cmbSuplier.ValueMember = "id_suplier";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal memuat suplier: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ClearInput()
@@ -43,46 +71,123 @@ namespace ManajemenObatApp
             txtNama.Clear();
             txtKategori.Clear();
             txtTanggal.Clear();
+            txtHargaSatuan.Clear();
+            txtJumlahStock.Clear();
+            cmbSuplier.SelectedIndex = -1; // Reset combobox
         }
+
+        private void RefreshData()
+        {
+            cache.Remove(cacheKey);
+            LoadData();
+            ClearInput();
+        }
+        private void AnalyzeQuery(string sqlQuery)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["ManajemenObatDB"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.InfoMessage += (s, e) => MessageBox.Show(e.Message, "STATISTICS INFO");
+
+                try
+                {
+                    conn.Open();
+                    string wrappedQuery = @"
+                SET STATISTICS IO ON;
+                SET STATISTICS TIME ON;
+                " + sqlQuery + @";
+                SET STATISTICS IO OFF;
+                SET STATISTICS TIME OFF;
+            ";
+
+                    using (SqlCommand cmd = new SqlCommand(wrappedQuery, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Gagal menjalankan analisis: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
 
         private void btnTambah_Click(object sender, EventArgs e)
         {
-            if (txtId.Text == "" || txtNama.Text == "" || txtKategori.Text == "" || txtTanggal.Text == "")
+            if (txtId.Text == "" || txtNama.Text == "" || txtKategori.Text == "" || txtTanggal.Text == "" || txtHargaSatuan.Text == "" || txtJumlahStock.Text == "" || cmbSuplier.SelectedIndex == -1)
             {
-                MessageBox.Show("Isi data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Isi semua data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string query = "INSERT INTO obat (id_obat, nama, kategori, tgl_kadaluwarsa) VALUES (@id, @nama, @kategori, @tgl)";
-            SqlParameter[] parameters = {
-                new SqlParameter("@id", txtId.Text),
-                new SqlParameter("@nama", txtNama.Text),
-                new SqlParameter("@kategori", txtKategori.Text),
-                new SqlParameter("@tgl", DateTime.Parse(txtTanggal.Text))
-            };
-            db.ExecuteNonQuery(query, parameters);
-            LoadData();
-            ClearInput();
+            DateTime tglKadaluarsa = DateTime.Parse(txtTanggal.Text);
+            if (tglKadaluarsa < DateTime.Today)
+            {
+                MessageBox.Show("Tanggal kadaluarsa tidak boleh kurang dari hari ini!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                string query = "EXEC tambah_obat @id, @nama, @kategori, @tgl, @harga, @id_suplier, @jumlah";
+                SqlParameter[] parameters = {
+                    new SqlParameter("@id", txtId.Text),
+                    new SqlParameter("@nama", txtNama.Text),
+                    new SqlParameter("@kategori", txtKategori.Text),
+                    new SqlParameter("@tgl", DateTime.Parse(txtTanggal.Text)),
+                    new SqlParameter("@harga", decimal.Parse(txtHargaSatuan.Text)),
+                    new SqlParameter("@id_suplier", cmbSuplier.SelectedValue.ToString()),
+                    new SqlParameter("@jumlah", int.Parse(txtJumlahStock.Text))
+                };
+                db.ExecuteNonQuery(query, parameters);
+                RefreshData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal menambahkan data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            if (txtId.Text == "" || txtNama.Text == "" || txtKategori.Text == "" || txtTanggal.Text == "")
+            if (txtId.Text == "" || txtNama.Text == "" || txtKategori.Text == "" || txtTanggal.Text == "" ||
+        txtJumlahStock.Text == "" || txtHargaSatuan.Text == "" || cmbSuplier.SelectedValue == null)
             {
-                MessageBox.Show("Isi data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Isi semua data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string query = "UPDATE obat SET nama = @nama, kategori = @kategori, tgl_kadaluwarsa = @tgl WHERE id_obat = @id";
-            SqlParameter[] parameters = {
-                new SqlParameter("@id", txtId.Text),
-                new SqlParameter("@nama", txtNama.Text),
-                new SqlParameter("@kategori", txtKategori.Text),
-                new SqlParameter("@tgl", DateTime.Parse(txtTanggal.Text))
-            };
-            db.ExecuteNonQuery(query, parameters);
-            LoadData();
-            ClearInput();
+            DialogResult confirm = MessageBox.Show("Apakah Anda yakin ingin mengubah data obat ini?", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirm != DialogResult.Yes)
+                return;
+
+            DateTime tglKadaluarsa = DateTime.Parse(txtTanggal.Text);
+            if (tglKadaluarsa < DateTime.Today)
+            {
+                MessageBox.Show("Tanggal kadaluarsa tidak boleh kurang dari hari ini!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                string query = "EXEC update_obat @id, @nama, @kategori, @tgl, @harga, @suplier, @jumlah";
+                SqlParameter[] parameters = {
+            new SqlParameter("@id", txtId.Text),
+            new SqlParameter("@nama", txtNama.Text),
+            new SqlParameter("@kategori", txtKategori.Text),
+            new SqlParameter("@tgl", DateTime.Parse(txtTanggal.Text)),
+            new SqlParameter("@harga", decimal.Parse(txtHargaSatuan.Text)),
+            new SqlParameter("@suplier", cmbSuplier.SelectedValue.ToString()),
+            new SqlParameter("@jumlah", int.Parse(txtJumlahStock.Text))
+        };
+                db.ExecuteNonQuery(query, parameters);
+                RefreshData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal mengedit data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -94,26 +199,63 @@ namespace ManajemenObatApp
         {
             if (txtId.Text == "")
             {
-                MessageBox.Show("Ketik ID yang ingin dihapus!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Pilih data obat yang ingin dihapus!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string query = "DELETE FROM obat WHERE id_obat = @id";
-            SqlParameter[] parameters = {
-                new SqlParameter("@id", txtId.Text)
-            };
-            db.ExecuteNonQuery(query, parameters);
-            LoadData();
-            ClearInput();
+            DialogResult confirm = MessageBox.Show("Apakah Anda yakin ingin menghapus data obat ini?", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirm != DialogResult.Yes)
+                return;
+
+            try
+            {
+                string query = "EXEC hapus_obat @id";
+                SqlParameter[] parameters = {
+            new SqlParameter("@id", txtId.Text)
+        };
+                db.ExecuteNonQuery(query, parameters);
+                RefreshData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal menghapus data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
         private void dgvObat_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridViewRow row = dgvObat.Rows[e.RowIndex];
-            txtId.Text = row.Cells["id_obat"].Value.ToString();
-            txtNama.Text = row.Cells["nama"].Value.ToString();
-            txtKategori.Text = row.Cells["kategori"].Value.ToString();
-            txtTanggal.Text = Convert.ToDateTime(row.Cells["tgl_kadaluwarsa"].Value).ToString("yyyy-MM-dd");
+            try
+            {
+                if (e.RowIndex >= 0)
+                {
+                    DataGridViewRow row = dgvObat.Rows[e.RowIndex];
+                    txtId.Text = row.Cells["id_obat"].Value.ToString();
+                    txtNama.Text = row.Cells["nama_obat"].Value.ToString();
+                    txtKategori.Text = row.Cells["kategori"].Value.ToString();
+                    txtTanggal.Text = Convert.ToDateTime(row.Cells["tgl_kadaluwarsa"].Value).ToString("dd-MM-yyyy");
+                    txtHargaSatuan.Text = row.Cells["harga_satuan"].Value.ToString();
+                    txtJumlahStock.Text = row.Cells["jumlah_stock"].Value.ToString();
+                    cmbSuplier.Text = dgvObat.Rows[e.RowIndex].Cells["suplier"].Value.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal mengambil data dari tabel: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
+
+        private void btnAnalyze_Click(object sender, EventArgs e)
+        {
+            string query = "EXEC tampilkan_data_obat";
+            AnalyzeQuery(query);
+        }
+
     }
 }

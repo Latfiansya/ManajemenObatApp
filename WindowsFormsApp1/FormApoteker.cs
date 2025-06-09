@@ -13,21 +13,29 @@ using System.Windows.Forms;
 
 namespace ManajemenObatApp
 {
-    public partial class FormApoteker: Form
+    public partial class FormApoteker : Form
     {
         DatabaseHelper db;
+
+
         public FormApoteker()
         {
             InitializeComponent();
             string connectionString = ConfigurationManager.ConnectionStrings["ManajemenObatDB"].ConnectionString;
             db = new DatabaseHelper(connectionString);
             LoadData();
-
         }
 
         private void LoadData()
         {
-            dgvApoteker.DataSource = db.ExecuteQuery("EXEC select_apoteker");
+            try
+            {
+                dgvApoteker.DataSource = db.ExecuteQuery("EXEC tampilkan_data_apoteker");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal memuat data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ClearInput()
@@ -41,19 +49,26 @@ namespace ManajemenObatApp
         {
             if (txtId.Text == "" || txtNama.Text == "" || txtPassword.Text.Length < 8)
             {
-                MessageBox.Show("Isi data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Isi semua data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string query = "EXEC tambah_apoteker @id, @nama, @pass";
-            SqlParameter[] param = {
-                new SqlParameter("@id", txtId.Text),
-                new SqlParameter("@nama", txtNama.Text),
-                new SqlParameter("@pass", txtPassword.Text)
-            };
-            db.ExecuteNonQuery(query, param);
-            LoadData();
-            ClearInput();
+            try
+            {
+                string query = "EXEC tambah_apoteker @id, @nama, @pass";
+                SqlParameter[] param = {
+                    new SqlParameter("@id", txtId.Text),
+                    new SqlParameter("@nama", txtNama.Text),
+                    new SqlParameter("@pass", txtPassword.Text)
+                };
+                db.ExecuteNonQuery(query, param);
+                LoadData();
+                ClearInput();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal menambahkan data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -65,45 +80,81 @@ namespace ManajemenObatApp
         {
             if (txtId.Text == "")
             {
-                MessageBox.Show("Klik ID yang ingin dihapus!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Pilih data apoteker yang ingin dihapus!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string query = "EXEC hapus_apoteker @id";
-            SqlParameter[] param = {
-                new SqlParameter("@id", txtId.Text)
-            };
-            db.ExecuteNonQuery(query, param);
-            LoadData();
-            ClearInput();
+            DialogResult confirm = MessageBox.Show("Apakah Anda yakin ingin menghapus data ini?", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirm != DialogResult.Yes)
+                return;
+
+            try
+            {
+                string query = "EXEC hapus_apoteker @id";
+                SqlParameter[] param = {
+                    new SqlParameter("@id", txtId.Text)
+                };
+                db.ExecuteNonQuery(query, param);
+                LoadData();
+                ClearInput();
+                MessageBox.Show("Data berhasil dihapus!", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal menghapus data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
             if (txtId.Text == "" || txtNama.Text == "" || txtPassword.Text.Length < 8)
             {
-                MessageBox.Show("Isi data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Isi semua data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            DialogResult confirm = MessageBox.Show("Apakah Anda yakin ingin mengubah data ini?", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirm != DialogResult.Yes)
+                return;
 
-            string query = "EXEC update_apoteker @id, @nama, @pass";
-            SqlParameter[] param = {
-                new SqlParameter("@id", txtId.Text),
-                new SqlParameter("@nama", txtNama.Text),
-                new SqlParameter("@pass", txtPassword.Text)
-            };
-            db.ExecuteNonQuery(query, param);
-            LoadData();
-            ClearInput();
-        }
-        private void dgvApoteker_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
+            try
             {
-                txtId.Text = dgvApoteker.Rows[e.RowIndex].Cells["id_apoteker"].Value.ToString();
-                txtNama.Text = dgvApoteker.Rows[e.RowIndex].Cells["nama"].Value.ToString();
-                txtPassword.Text = dgvApoteker.Rows[e.RowIndex].Cells["password"].Value.ToString();
+                string query = "EXEC update_apoteker @id, @nama, @pass";
+                SqlParameter[] param = {
+                    new SqlParameter("@id", txtId.Text),
+                    new SqlParameter("@nama", txtNama.Text),
+                    new SqlParameter("@pass", txtPassword.Text)
+                };
+                db.ExecuteNonQuery(query, param);
+                LoadData();
+                ClearInput();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal mengedit data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void dgvApoteker_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (e.RowIndex >= 0)
+                {
+                    txtId.Text = dgvApoteker.Rows[e.RowIndex].Cells["id_apoteker"].Value.ToString();
+                    txtNama.Text = dgvApoteker.Rows[e.RowIndex].Cells["nama"].Value.ToString();
+                    txtPassword.Text = dgvApoteker.Rows[e.RowIndex].Cells["password"].Value.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal menampilkan data ke form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
     }
 }

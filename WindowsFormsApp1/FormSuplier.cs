@@ -27,9 +27,14 @@ namespace ManajemenObatApp
 
         private void LoadData()
         {
-            string query = "SELECT * FROM suplier";
-            DataTable dt = db.ExecuteQueryWithParameters(query, new SqlParameter[0]);
-            dgvSuplier.DataSource = dt;
+            try
+            {
+                dgvSuplier.DataSource = db.ExecuteQuery("EXEC tampilkan_data_suplier");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal memuat data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void ClearInput()
         {
@@ -40,40 +45,91 @@ namespace ManajemenObatApp
 
         private void btnTambah_Click(object sender, EventArgs e)
         {
-            string query = "INSERT INTO suplier VALUES (@id, @nama, @jenis)";
-            SqlParameter[] param = {
-                new SqlParameter("@id", txtId.Text),
-                new SqlParameter("@nama", txtNama.Text),
-                new SqlParameter("@jenis", txtJenisObat.Text)
-            };
-            db.ExecuteNonQuery(query, param);
-            LoadData();
-            ClearInput();
+            if (txtId.Text == "" || txtNama.Text == "" || txtJenisObat.Text == "")
+            {
+                MessageBox.Show("Isi semua data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            try
+            {
+                string query = "EXEC tambah_suplier @id_suplier, @nama, @jenis_obat";
+                SqlParameter[] param = {
+            new SqlParameter("@id_suplier", txtId.Text),
+            new SqlParameter("@nama", txtNama.Text),
+            new SqlParameter("@jenis_obat", txtJenisObat.Text)
+        };
+
+                db.ExecuteNonQuery(query, param);
+                LoadData();
+                ClearInput();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Terjadi kesalahan: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            string query = "UPDATE suplier SET nama=@nama, jenis_obat=@jenis WHERE id_suplier=@id";
-            SqlParameter[] param = {
-                new SqlParameter("@nama", txtNama.Text),
-                new SqlParameter("@jenis", txtJenisObat.Text),
-                new SqlParameter("@id", txtId.Text)
-            };
-            db.ExecuteNonQuery(query, param);
-            LoadData();
-            ClearInput();
+            if (txtId.Text == "" || txtNama.Text == "" || txtJenisObat.Text == "")
+            {
+                MessageBox.Show("Isi semua data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DialogResult confirm = MessageBox.Show("Apakah Anda yakin ingin mengubah data suplier ini?", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirm != DialogResult.Yes)
+                return;
+
+            try
+            {
+                string query = "EXEC update_suplier @id_suplier, @nama, @jenis_obat";
+                SqlParameter[] parameters = {
+            new SqlParameter("@id_suplier", txtId.Text),
+            new SqlParameter("@nama", string.IsNullOrWhiteSpace(txtNama.Text) ? (object)DBNull.Value : txtNama.Text),
+            new SqlParameter("@jenis_obat", string.IsNullOrWhiteSpace(txtJenisObat.Text) ? (object)DBNull.Value : txtJenisObat.Text)
+        };
+
+                db.ExecuteNonQuery(query, parameters);
+                LoadData();
+                ClearInput();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal mengedit data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
         private void btnHapus_Click(object sender, EventArgs e)
         {
-            string query = "DELETE FROM suplier WHERE id_suplier=@id";
-            SqlParameter[] param = {
-                new SqlParameter("@id", txtId.Text)
-            };
-            db.ExecuteNonQuery(query, param);
-            LoadData();
-            ClearInput();
+            if (txtId.Text == "")
+            {
+                MessageBox.Show("Pilih data suplier yang ingin dihapus!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DialogResult confirm = MessageBox.Show("Apakah Anda yakin ingin menghapus data suplier ini?", "Konfirmasi", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirm != DialogResult.Yes)
+                return;
+
+            try
+            {
+                string query = "EXEC hapus_suplier @id";  
+                SqlParameter[] param = {
+            new SqlParameter("@id", txtId.Text)
+        };
+                db.ExecuteNonQuery(query, param);
+                LoadData();
+                ClearInput();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal menghapus data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
         private void btnClear_Click(object sender, EventArgs e)
         {
@@ -82,12 +138,26 @@ namespace ManajemenObatApp
 
         private void dgvSuplier_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            try
             {
-                txtId.Text = dgvSuplier.Rows[e.RowIndex].Cells["id_suplier"].Value.ToString();
-                txtNama.Text = dgvSuplier.Rows[e.RowIndex].Cells["nama"].Value.ToString();
-                txtJenisObat.Text = dgvSuplier.Rows[e.RowIndex].Cells["jenis_obat"].Value.ToString();
+                if (e.RowIndex >= 0)
+                {
+                    DataGridViewRow row = dgvSuplier.Rows[e.RowIndex];
+                    txtId.Text = dgvSuplier.Rows[e.RowIndex].Cells["Id_Suplier"].Value.ToString();
+                    txtNama.Text = dgvSuplier.Rows[e.RowIndex].Cells["Nama_Suplier"].Value.ToString();
+                    txtJenisObat.Text = dgvSuplier.Rows[e.RowIndex].Cells["jenis_obat"].Value.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal mengambil data dari tabel: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
+
     }
 }
