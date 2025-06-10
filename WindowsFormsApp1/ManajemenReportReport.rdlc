@@ -251,16 +251,6 @@
         <TablixColumnHierarchy>
           <TablixMembers>
             <TablixMember>
-              <Group Name="Nama_Apoteker">
-                <GroupExpressions>
-                  <GroupExpression>=Fields!Nama_Apoteker.Value</GroupExpression>
-                </GroupExpressions>
-              </Group>
-              <SortExpressions>
-                <SortExpression>
-                  <Value>=Fields!Nama_Apoteker.Value</Value>
-                </SortExpression>
-              </SortExpressions>
               <TablixHeader>
                 <Size>0.6cm</Size>
                 <CellContents>
