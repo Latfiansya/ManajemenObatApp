@@ -34,10 +34,19 @@ namespace ManajemenObatApp
         };
 
                 // Ambil connection string dari App.config
-                string connectionString = ConfigurationManager.ConnectionStrings["ManajemenObatDB"].ConnectionString;
-
+                //string connectionString = ConfigurationManager.ConnectionStrings["ManajemenObatDB"].ConnectionString;
+                var kon = new ManajemenObatApp.Helpers.Koneksi();
+                string connStr = kon.connectionString();
+                if (string.IsNullOrEmpty(connStr))
+                {
+                    MessageBox.Show(
+                        "Gagal membangun connection string. Pastikan jaringan dan konfigurasi benar.",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    this.Close();
+                    return;
+                }
                 // Gunakan helper
-                DatabaseHelper db = new DatabaseHelper(connectionString);
+                DatabaseHelper db = new DatabaseHelper(connStr);
                 DataTable result = db.ExecuteQueryWithParameters(query, parameters);
 
                 if (result.Rows.Count > 0)
