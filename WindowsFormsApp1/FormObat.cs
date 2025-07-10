@@ -70,7 +70,7 @@ namespace ManajemenObatApp
             txtId.Clear();
             txtNama.Clear();
             txtKategori.Clear();
-            txtTanggal.Clear();
+            dtpTanggal.Value = DateTime.Today;
             txtHargaSatuan.Clear();
             txtJumlahStock.Clear();
             cmbSuplier.SelectedIndex = -1; // Reset combobox
@@ -115,14 +115,15 @@ namespace ManajemenObatApp
 
         private void btnTambah_Click(object sender, EventArgs e)
         {
-            if (txtId.Text == "" || txtNama.Text == "" || txtKategori.Text == "" || txtTanggal.Text == "" || txtHargaSatuan.Text == "" || txtJumlahStock.Text == "" || cmbSuplier.SelectedIndex == -1)
+            if (txtId.Text == "" || txtNama.Text == "" || txtKategori.Text == "" ||  txtHargaSatuan.Text == "" || txtJumlahStock.Text == "" || cmbSuplier.SelectedIndex == -1)
             {
                 MessageBox.Show("Isi semua data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            DateTime tglKadaluarsa = DateTime.Parse(txtTanggal.Text);
+            DateTime tglKadaluarsa = dtpTanggal.Value;
             if (tglKadaluarsa < DateTime.Today)
+
             {
                 MessageBox.Show("Tanggal kadaluarsa tidak boleh kurang dari hari ini!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -135,7 +136,7 @@ namespace ManajemenObatApp
                     new SqlParameter("@id", txtId.Text),
                     new SqlParameter("@nama", txtNama.Text),
                     new SqlParameter("@kategori", txtKategori.Text),
-                    new SqlParameter("@tgl", DateTime.Parse(txtTanggal.Text)),
+                    new SqlParameter("@tgl", dtpTanggal.Value),
                     new SqlParameter("@harga", decimal.Parse(txtHargaSatuan.Text)),
                     new SqlParameter("@id_suplier", cmbSuplier.SelectedValue.ToString()),
                     new SqlParameter("@jumlah", int.Parse(txtJumlahStock.Text))
@@ -151,7 +152,7 @@ namespace ManajemenObatApp
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            if (txtId.Text == "" || txtNama.Text == "" || txtKategori.Text == "" || txtTanggal.Text == "" ||
+            if (txtId.Text == "" || txtNama.Text == "" || txtKategori.Text == "" ||
         txtJumlahStock.Text == "" || txtHargaSatuan.Text == "" || cmbSuplier.SelectedValue == null)
             {
                 MessageBox.Show("Isi semua data dengan benar!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -162,7 +163,7 @@ namespace ManajemenObatApp
             if (confirm != DialogResult.Yes)
                 return;
 
-            DateTime tglKadaluarsa = DateTime.Parse(txtTanggal.Text);
+            DateTime tglKadaluarsa = dtpTanggal.Value;
             if (tglKadaluarsa < DateTime.Today)
             {
                 MessageBox.Show("Tanggal kadaluarsa tidak boleh kurang dari hari ini!", "Peringatan", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -176,7 +177,7 @@ namespace ManajemenObatApp
             new SqlParameter("@id", txtId.Text),
             new SqlParameter("@nama", txtNama.Text),
             new SqlParameter("@kategori", txtKategori.Text),
-            new SqlParameter("@tgl", DateTime.Parse(txtTanggal.Text)),
+            new SqlParameter("@tgl", dtpTanggal.Value),
             new SqlParameter("@harga", decimal.Parse(txtHargaSatuan.Text)),
             new SqlParameter("@suplier", cmbSuplier.SelectedValue.ToString()),
             new SqlParameter("@jumlah", int.Parse(txtJumlahStock.Text))
@@ -233,7 +234,7 @@ namespace ManajemenObatApp
                     txtId.Text = row.Cells["id_obat"].Value.ToString();
                     txtNama.Text = row.Cells["nama_obat"].Value.ToString();
                     txtKategori.Text = row.Cells["kategori"].Value.ToString();
-                    txtTanggal.Text = Convert.ToDateTime(row.Cells["tgl_kadaluwarsa"].Value).ToString("dd-MM-yyyy");
+                    dtpTanggal.Value = Convert.ToDateTime(row.Cells["tgl_kadaluwarsa"].Value);
                     txtHargaSatuan.Text = row.Cells["harga_satuan"].Value.ToString();
                     txtJumlahStock.Text = row.Cells["jumlah_stock"].Value.ToString();
                     cmbSuplier.Text = dgvObat.Rows[e.RowIndex].Cells["suplier"].Value.ToString();

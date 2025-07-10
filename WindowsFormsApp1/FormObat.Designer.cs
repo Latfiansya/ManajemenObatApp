@@ -39,7 +39,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.dgvObat = new System.Windows.Forms.DataGridView();
-            this.txtTanggal = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.btnHapus = new System.Windows.Forms.Button();
             this.cmbSuplier = new System.Windows.Forms.ComboBox();
@@ -50,6 +49,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.btnBack = new System.Windows.Forms.Button();
             this.btnAnalyze = new System.Windows.Forms.Button();
+            this.dtpTanggal = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.dgvObat)).BeginInit();
             this.SuspendLayout();
             // 
@@ -144,13 +144,6 @@
             this.dgvObat.TabIndex = 11;
             this.dgvObat.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvObat_CellContentClick);
             // 
-            // txtTanggal
-            // 
-            this.txtTanggal.Location = new System.Drawing.Point(133, 116);
-            this.txtTanggal.Name = "txtTanggal";
-            this.txtTanggal.Size = new System.Drawing.Size(175, 22);
-            this.txtTanggal.TabIndex = 23;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -241,11 +234,19 @@
             this.btnAnalyze.UseVisualStyleBackColor = true;
             this.btnAnalyze.Click += new System.EventHandler(this.btnAnalyze_Click);
             // 
+            // dtpTanggal
+            // 
+            this.dtpTanggal.Location = new System.Drawing.Point(133, 116);
+            this.dtpTanggal.Name = "dtpTanggal";
+            this.dtpTanggal.Size = new System.Drawing.Size(175, 22);
+            this.dtpTanggal.TabIndex = 45;
+            // 
             // FormObat
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1492, 450);
+            this.Controls.Add(this.dtpTanggal);
             this.Controls.Add(this.btnAnalyze);
             this.Controls.Add(this.btnBack);
             this.Controls.Add(this.label7);
@@ -255,7 +256,6 @@
             this.Controls.Add(this.txtJumlahStock);
             this.Controls.Add(this.cmbSuplier);
             this.Controls.Add(this.btnHapus);
-            this.Controls.Add(this.txtTanggal);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnEdit);
@@ -287,7 +287,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dgvObat;
-        private System.Windows.Forms.TextBox txtTanggal;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnHapus;
         private System.Windows.Forms.ComboBox cmbSuplier;
@@ -298,5 +297,6 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.Button btnAnalyze;
+        private System.Windows.Forms.DateTimePicker dtpTanggal;
     }
 }
