@@ -26,10 +26,38 @@ namespace ManajemenObatApp
             InitializeComponent();
             string connectionString = ConfigurationManager.ConnectionStrings["ManajemenObatDB"].ConnectionString;
             db = new DatabaseHelper(connectionString);
+            EnsureIndexes();
             LoadData();
             LoadSuplier();
         }
 
+        private void EnsureIndexes()
+        {
+            // Dijalankan sekali per startup
+            string sql = @"
+    IF NOT EXISTS (SELECT 1 FROM sys.indexes i JOIN sys.objects o ON i.object_id=o.object_id
+                   WHERE o.name='stock_obat' AND i.name='idx_stock_obat_id_obat')
+      CREATE NONCLUSTERED INDEX idx_stock_obat_id_obat ON stock_obat(id_obat);
+
+    IF NOT EXISTS (SELECT 1 FROM sys.indexes i JOIN sys.objects o ON i.object_id=o.object_id
+                   WHERE o.name='stock_obat' AND i.name='idx_stock_obat_id_suplier')
+      CREATE NONCLUSTERED INDEX idx_stock_obat_id_suplier ON stock_obat(id_suplier);
+
+    IF NOT EXISTS (SELECT 1 FROM sys.indexes i JOIN sys.objects o ON i.object_id=o.object_id
+                   WHERE o.name='transaksi' AND i.name='idx_transaksi_id_apoteker')
+      CREATE NONCLUSTERED INDEX idx_transaksi_id_apoteker ON transaksi(id_apoteker);
+
+    IF NOT EXISTS (SELECT 1 FROM sys.indexes i JOIN sys.objects o ON i.object_id=o.object_id
+                   WHERE o.name='transaksi' AND i.name='idx_transaksi_id_obat')
+      CREATE NONCLUSTERED INDEX idx_transaksi_id_obat ON transaksi(id_obat);
+
+    IF NOT EXISTS (SELECT 1 FROM sys.indexes i JOIN sys.objects o ON i.object_id=o.object_id
+                   WHERE o.name='racikan_obat' AND i.name='idx_racikan_id_transaksi')
+      CREATE NONCLUSTERED INDEX idx_racikan_id_transaksi ON racikan_obat(id_transaksi);
+    ";
+
+            db.ExecuteNonQuery(sql, new SqlParameter[0]);
+        }
 
         private void LoadData()
         {
@@ -258,5 +286,46 @@ namespace ManajemenObatApp
             AnalyzeQuery(query);
         }
 
+        private void btnIndexReport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // ambil data index
+                DataTable dt = db.ExecuteQuery("EXEC rpt_index_list");
+
+                // bikin form kustom untuk report
+                Form reportForm = new Form();
+                reportForm.Text = "Index Report";
+                reportForm.StartPosition = FormStartPosition.CenterParent;
+                reportForm.Size = new Size(600, 400);   // sesuaikan lebar & tinggi
+
+                // DataGridView untuk menampilkan index
+                DataGridView dgv = new DataGridView
+                {
+                    DataSource = dt,
+                    Dock = DockStyle.Fill,
+                    ReadOnly = true,
+                    AllowUserToAddRows = false
+                };
+                reportForm.Controls.Add(dgv);
+
+                // Tombol Close di bawah
+                Button btnClose = new Button
+                {
+                    Text = "Close",
+                    Dock = DockStyle.Bottom,
+                    Height = 30
+                };
+                btnClose.Click += (s, ea) => reportForm.Close();
+                reportForm.Controls.Add(btnClose);
+
+                // Tampilkan sebagai dialog modal agar bisa kembali ke FormObat setelah ditutup
+                reportForm.ShowDialog(this);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal generate Index Report: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

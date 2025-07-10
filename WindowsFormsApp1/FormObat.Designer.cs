@@ -50,6 +50,7 @@
             this.btnBack = new System.Windows.Forms.Button();
             this.btnAnalyze = new System.Windows.Forms.Button();
             this.dtpTanggal = new System.Windows.Forms.DateTimePicker();
+            this.btnIndexReport = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvObat)).BeginInit();
             this.SuspendLayout();
             // 
@@ -228,7 +229,7 @@
             // 
             this.btnAnalyze.Location = new System.Drawing.Point(19, 329);
             this.btnAnalyze.Name = "btnAnalyze";
-            this.btnAnalyze.Size = new System.Drawing.Size(289, 30);
+            this.btnAnalyze.Size = new System.Drawing.Size(138, 30);
             this.btnAnalyze.TabIndex = 44;
             this.btnAnalyze.Text = "Analyze";
             this.btnAnalyze.UseVisualStyleBackColor = true;
@@ -241,11 +242,22 @@
             this.dtpTanggal.Size = new System.Drawing.Size(175, 22);
             this.dtpTanggal.TabIndex = 45;
             // 
+            // btnIndexReport
+            // 
+            this.btnIndexReport.Location = new System.Drawing.Point(170, 329);
+            this.btnIndexReport.Name = "btnIndexReport";
+            this.btnIndexReport.Size = new System.Drawing.Size(138, 30);
+            this.btnIndexReport.TabIndex = 47;
+            this.btnIndexReport.Text = "Report Index";
+            this.btnIndexReport.UseVisualStyleBackColor = true;
+            this.btnIndexReport.Click += new System.EventHandler(this.btnIndexReport_Click);
+            // 
             // FormObat
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1492, 450);
+            this.Controls.Add(this.btnIndexReport);
             this.Controls.Add(this.dtpTanggal);
             this.Controls.Add(this.btnAnalyze);
             this.Controls.Add(this.btnBack);
@@ -298,5 +310,6 @@
         private System.Windows.Forms.Button btnBack;
         private System.Windows.Forms.Button btnAnalyze;
         private System.Windows.Forms.DateTimePicker dtpTanggal;
+        private System.Windows.Forms.Button btnIndexReport;
     }
 }
