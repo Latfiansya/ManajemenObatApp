@@ -26,7 +26,16 @@ namespace ManajemenObatApp
         public FormTransaksi()
         {
             InitializeComponent();
-            string connectionString = ConfigurationManager.ConnectionStrings["ManajemenObatDB"].ConnectionString;
+            var kon = new ManajemenObatApp.Helpers.Koneksi();
+            string connectionString = kon.connectionString();
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                MessageBox.Show(
+                    "Gagal membangun connection string. Pastikan jaringan dan konfigurasi benar.",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Close();
+                return;
+            }
             db = new DatabaseHelper(connectionString);
             LoadData();
             LoadApoteker();
@@ -95,7 +104,7 @@ namespace ManajemenObatApp
         }
         private void AnalyzeQuery(string sqlQuery)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["ManajemenObatDB"].ConnectionString;
+            string connectionString = db.ConnectionString;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.InfoMessage += (s, e) => MessageBox.Show(e.Message, "STATISTICS INFO");
